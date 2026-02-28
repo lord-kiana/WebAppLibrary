@@ -37,22 +37,23 @@ export default function Dashboard() {
     <div style={{ backgroundColor: isDarkMode ? "#0a0a0c" : "#ffffff", minHeight: "100vh", color: isDarkMode ? "#fff" : "#000000" }}>
       <Navbar />
 
-      <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "clamp(16px, 5vw, 40px) clamp(12px, 4vw, 20px)" }}>
-        <header style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1 style={{ fontSize: "2.5rem", fontWeight: 700, color: isDarkMode ? "#fff" : "#000000" }}>
+      <main style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "clamp(12px, 5vw, 40px) clamp(8px, 4vw, 20px)", boxSizing: "border-box" }}>
+        <header style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+          <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2.5rem)", fontWeight: 700, color: isDarkMode ? "#fff" : "#000000", margin: 0, flex: "1 1 100%" }}>
             Your <span style={{ color: "#3b82f6" }}>Library</span>
           </h1>
           <button
             onClick={handleAddClick}
             style={{
-              padding: "12px 24px",
+              padding: "clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px)",
               backgroundColor: "#3b82f6",
               border: "none",
               borderRadius: "12px",
               color: "#fff",
               fontWeight: 700,
               cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)"
+              boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
+              fontSize: "clamp(0.875rem, 2vw, 1rem)"
             }}
           >
             + new Book
