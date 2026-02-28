@@ -4,12 +4,7 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../useTheme";
 
-interface NavbarProps {
-  searchTerm?: string;
-  onSearchChange?: (term: string) => void;
-}
-
-const Navbar = ({ searchTerm = "", onSearchChange }: NavbarProps) => {
+const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const navigate = useNavigate();
@@ -53,15 +48,6 @@ const Navbar = ({ searchTerm = "", onSearchChange }: NavbarProps) => {
     cursor: "pointer"
   };
 
-  const linkStyle: React.CSSProperties = { 
-    color: isDarkMode ? "#a1a1aa" : "#666666", 
-    textDecoration: "none", 
-    fontSize: "0.9rem",
-    cursor: "pointer",
-    position: "relative",
-    padding: "10px 0",
-  };
-
   const dropdownStyle: React.CSSProperties = {
     position: "absolute",
     top: "100%",
@@ -88,51 +74,74 @@ const Navbar = ({ searchTerm = "", onSearchChange }: NavbarProps) => {
     alignItems: "center"
   };
 
-  const searchInputStyle: React.CSSProperties = {
-    padding: "8px 12px",
-    backgroundColor: isDarkMode ? "#18181b" : "#f5f5f5",
-    border: isDarkMode ? "1px solid #27272a" : "1px solid #d0d0d0",
-    borderRadius: "8px",
-    color: isDarkMode ? "#fff" : "#000",
-    fontSize: "0.9rem",
-    width: "200px",
-    maxWidth: "clamp(150px, 20vw, 300px)",
-    outline: "none",
-    transition: "all 0.2s",
+  const iconButtonStyle: React.CSSProperties = {
+    background: "none",
+    border: "none",
+    color: isDarkMode ? "#a1a1aa" : "#666666",
+    fontSize: "1.3rem",
+    cursor: "pointer",
+    padding: "8px",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    transition: "color 0.2s",
   };
 
   return (
     <nav style={navStyles}>
-      <div style={logoStyle} onClick={() => navigate("/dashboard")}>Crud Library .</div>
+      <div style={logoStyle}>Crud Library .</div>
 
-      <div style={{ display: "flex", gap: "16px", alignItems: "center", flexWrap: "wrap" }}>
-        {onSearchChange && (
-          <input
-            type="text"
-            placeholder="Search books..."
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            style={searchInputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = isDarkMode ? "#3b82f6" : "#3b82f6";
-              e.currentTarget.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = isDarkMode ? "#27272a" : "#d0d0d0";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-          />
-        )}
-        
-        <span onClick={() => navigate("/dashboard")} style={linkStyle}>Dashboard</span>
-
-        <div
-          style={{ ...linkStyle, color: isDarkMode ? "#ffffff" : "#000000" }}
-          onMouseEnter={() => setShowDropdown(true)}
-          onMouseLeave={() => setShowDropdown(false)}
+      <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+        <button 
+          style={iconButtonStyle} 
+          onClick={() => navigate("/dashboard")}
+          onMouseEnter={(e) => e.currentTarget.style.color = "#3b82f6"}
+          onMouseLeave={(e) => e.currentTarget.style.color = isDarkMode ? "#a1a1aa" : "#666666"}
+          title="Dashboard"
+          aria-label="Dashboard"
         >
-          Settings
-          <div style={dropdownStyle}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+
+        <button 
+          style={iconButtonStyle}
+          onClick={handleAbout}
+          onMouseEnter={(e) => e.currentTarget.style.color = "#3b82f6"}
+          onMouseLeave={(e) => e.currentTarget.style.color = isDarkMode ? "#a1a1aa" : "#666666"}
+          title="About Us"
+          aria-label="About Us"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </button>
+
+        <div style={{ position: "relative" }}>
+          <button
+            style={iconButtonStyle}
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+            onClick={() => setShowDropdown(!showDropdown)}
+            title="Settings"
+            aria-label="Settings"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6m-1.78 7.78l-4.24-4.24m-5.08-5.08L4.22 4.22"></path>
+            </svg>
+          </button>
+          <div 
+            style={dropdownStyle}
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
             <div
               style={dropdownItemStyle}
               onClick={toggleDarkMode}
@@ -143,15 +152,6 @@ const Navbar = ({ searchTerm = "", onSearchChange }: NavbarProps) => {
               <span style={{ fontSize: "10px", color: isDarkMode ? "#3b82f6" : "#71717a" }}>
                 {isDarkMode ? "ON" : "OFF"}
               </span>
-            </div>
-
-            <div 
-              style={dropdownItemStyle}
-              onClick={handleAbout}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDarkMode ? "#27272a" : "#e0e0e0"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
-            >
-              About Us
             </div>
 
             <div style={{ height: "1px", backgroundColor: isDarkMode ? "#27272a" : "#d0d0d0", margin: "4px 0" }} />

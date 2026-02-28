@@ -42,9 +42,39 @@ export default function Dashboard() {
 
   return (
     <div style={{ backgroundColor: isDarkMode ? "#0a0a0c" : "#ffffff", minHeight: "100vh", color: isDarkMode ? "#fff" : "#000000" }}>
-      <Navbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <Navbar />
 
-      <main style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "clamp(12px, 5vw, 40px) clamp(8px, 4vw, 20px)", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "clamp(12px, 5vw, 40px) clamp(8px, 4vw, 20px)", boxSizing: "border-box" }}>
+        <input
+          type="text"
+          placeholder="Search books by title or author..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "clamp(8px, 2vw, 12px) clamp(12px, 2vw, 16px)",
+            backgroundColor: isDarkMode ? "#18181b" : "#f5f5f5",
+            border: isDarkMode ? "1px solid #27272a" : "1px solid #d0d0d0",
+            borderRadius: "8px",
+            color: isDarkMode ? "#fff" : "#000",
+            fontSize: "clamp(0.875rem, 2vw, 1rem)",
+            marginBottom: "24px",
+            outline: "none",
+            transition: "all 0.2s",
+            boxSizing: "border-box"
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = "#3b82f6";
+            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = isDarkMode ? "#27272a" : "#d0d0d0";
+            e.currentTarget.style.boxShadow = "none";
+          }}
+        />
+      </div>
+
+      <main style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "0 clamp(8px, 4vw, 20px)", boxSizing: "border-box" }}>
         <header style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
           <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2.5rem)", fontWeight: 700, color: isDarkMode ? "#fff" : "#000000", margin: 0, flex: "1 1 100%" }}>
             Your <span style={{ color: "#3b82f6" }}>Library</span>
