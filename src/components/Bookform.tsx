@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { collection, addDoc, serverTimestamp, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import type { Book } from "../types";
+import { useTheme } from "../useTheme";
 
 type Props = {
   selectedBook: Book | null;
@@ -12,7 +13,7 @@ export default function BookForm({ selectedBook, clearSelection }: Props) {
   const [tittle, setTittle] = useState("");
   const [author, setAuthor] = useState("");
   const [image, setImage] = useState("");
-  
+  const { isDarkMode } = useTheme();
   // When selectedBook changes (open form for edit), populate fields
   useEffect(() => {
     // defer updates to avoid React warning about synchronous state changes inside effects
@@ -76,9 +77,9 @@ export default function BookForm({ selectedBook, clearSelection }: Props) {
       </h3>
 
       <div style={inputGroup}>
-        <label style={labelStyle}>Book Title</label>
+        <label style={getLabelStyle(isDarkMode)}>Book Title</label>
         <input
-          style={inputStyle}
+          style={getInputStyle(isDarkMode)}
           placeholder="e.g. Harry Potter"
           value={tittle}
           onChange={(e) => setTittle(e.target.value)}
@@ -86,9 +87,9 @@ export default function BookForm({ selectedBook, clearSelection }: Props) {
       </div>
 
       <div style={inputGroup}>
-        <label style={labelStyle}>Author Name</label>
+        <label style={getLabelStyle(isDarkMode)}>Author Name</label>
         <input
-          style={inputStyle}
+          style={getInputStyle(isDarkMode)}
           placeholder="e.g. J.K. Rowling"
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
@@ -96,9 +97,9 @@ export default function BookForm({ selectedBook, clearSelection }: Props) {
       </div>
 
       <div style={inputGroup}>
-        <label style={labelStyle}>Cover Image URL</label>
+        <label style={getLabelStyle(isDarkMode)}>Cover Image URL</label>
         <input
-          style={inputStyle}
+          style={getInputStyle(isDarkMode)}
           placeholder="Paste image link here..."
           value={image}
           onChange={(e) => setImage(e.target.value)}
@@ -109,14 +110,14 @@ export default function BookForm({ selectedBook, clearSelection }: Props) {
         {selectedBook ? "Save Changes" : "Publish Book"}
       </button>
 
-      <button type="button" onClick={clearSelection} style={cancelBtnStyle}>
+      <button type="button" onClick={clearSelection} style={getCancelBtnStyle(isDarkMode)}>
         Maybe Later
       </button>
     </form>
   );
 }
 
-// --- STYLES ---
+// --- STYLES (dynamic based on theme) ---
 
 const inputGroup = {
   display: "flex",
@@ -124,23 +125,23 @@ const inputGroup = {
   gap: "5px"
 };
 
-const labelStyle = {
+const getLabelStyle = (isDarkMode: boolean) => ({
   fontSize: "0.75rem",
-  color: "#71717a",
+  color: isDarkMode ? "#71717a" : "#666666",
   fontWeight: 600,
   textTransform: "uppercase" as const,
   letterSpacing: "0.05em"
-};
+});
 
-const inputStyle = {
+const getInputStyle = (isDarkMode: boolean) => ({
   width: "100%",
   padding: "12px",
-  backgroundColor: "#09090b",
-  border: "1px solid #27272a",
+  backgroundColor: isDarkMode ? "#09090b" : "#f5f5f5",
+  border: isDarkMode ? "1px solid #27272a" : "1px solid #d0d0d0",
   borderRadius: "8px",
-  color: "#fff",
+  color: isDarkMode ? "#fff" : "#000",
   boxSizing: "border-box" as const,
-};
+});
 
 const submitBtnStyle = {
   width: "100%",
@@ -156,12 +157,12 @@ const submitBtnStyle = {
   boxShadow: "0 4px 10px rgba(59, 130, 246, 0.2)"
 };
 
-const cancelBtnStyle = {
+const getCancelBtnStyle = (isDarkMode: boolean) => ({
   width: "100%",
   padding: "10px",
   backgroundColor: "transparent",
-  color: "#71717a",
+  color: isDarkMode ? "#71717a" : "#999999",
   border: "none",
   cursor: "pointer",
   fontSize: "0.9rem"
-};
+});
