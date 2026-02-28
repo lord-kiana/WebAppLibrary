@@ -4,7 +4,12 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../useTheme";
 
-const Navbar = () => {
+interface NavbarProps {
+  searchTerm?: string;
+  onSearchChange?: (term: string) => void;
+}
+
+const Navbar = ({ searchTerm = "", onSearchChange }: NavbarProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const navigate = useNavigate();
@@ -22,7 +27,7 @@ const Navbar = () => {
   };
 
   const handleAbout = () => {
-    alert("Crud Library - Your Personal Wattpad-Style Library v1.0");
+    navigate("/about");
   };
 
   // STYLES - now responsive to theme
@@ -83,11 +88,42 @@ const Navbar = () => {
     alignItems: "center"
   };
 
+  const searchInputStyle: React.CSSProperties = {
+    padding: "8px 12px",
+    backgroundColor: isDarkMode ? "#18181b" : "#f5f5f5",
+    border: isDarkMode ? "1px solid #27272a" : "1px solid #d0d0d0",
+    borderRadius: "8px",
+    color: isDarkMode ? "#fff" : "#000",
+    fontSize: "0.9rem",
+    width: "200px",
+    maxWidth: "clamp(150px, 20vw, 300px)",
+    outline: "none",
+    transition: "all 0.2s",
+  };
+
   return (
     <nav style={navStyles}>
       <div style={logoStyle} onClick={() => navigate("/dashboard")}>Crud Library .</div>
 
-      <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
+      <div style={{ display: "flex", gap: "16px", alignItems: "center", flexWrap: "wrap" }}>
+        {onSearchChange && (
+          <input
+            type="text"
+            placeholder="Search books..."
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            style={searchInputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = isDarkMode ? "#3b82f6" : "#3b82f6";
+              e.currentTarget.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = isDarkMode ? "#27272a" : "#d0d0d0";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          />
+        )}
+        
         <span onClick={() => navigate("/dashboard")} style={linkStyle}>Dashboard</span>
 
         <div

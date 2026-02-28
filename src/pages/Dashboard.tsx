@@ -13,6 +13,7 @@ export default function Dashboard() {
   const [books, setBooks] = useState<Book[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -22,6 +23,12 @@ export default function Dashboard() {
     });
     return () => unsubscribe();
   }, []);
+
+  // Filter books based on search term
+  const filteredBooks = books.filter((book) =>
+    book.Tittle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.Author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleAddClick = () => {
     setSelectedBook(null);
@@ -35,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ backgroundColor: isDarkMode ? "#0a0a0c" : "#ffffff", minHeight: "100vh", color: isDarkMode ? "#fff" : "#000000" }}>
-      <Navbar />
+      <Navbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       <main style={{ maxWidth: "1200px", width: "100%", margin: "0 auto", padding: "clamp(12px, 5vw, 40px) clamp(8px, 4vw, 20px)", boxSizing: "border-box" }}>
         <header style={{ marginBottom: "40px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
@@ -60,7 +67,7 @@ export default function Dashboard() {
           </button>
         </header>
 
-        <BookList books={books} onEdit={handleEditClick} />
+        <BookList books={filteredBooks} onEdit={handleEditClick} />
 
         {showForm && (
           <div className={styles.floatingPanel}>
